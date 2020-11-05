@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import { API, Storage } from 'aws-amplify';
-import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
+
 import { listNotes } from './graphql/queries';
 import { createNote as createNoteMutation, deleteNote as deleteNoteMutation, updateNote as updateNoteMutation } from './graphql/mutations';
 
@@ -13,20 +13,24 @@ function App() {
   const [editFlag, setEditFlag] = useState(false);
   const [editData, setEditData] = useState(0);
 
-  const [, updateState] = useState();
-  const forceUpdate = useCallback(() => updateState({}), []);
+ 
 
 
   useEffect(() => {
     fetchNotes();
   }, []);
+  useEffect(() => {
+    fetchNotes();
+  }, [notes]);
+
+
   function updateHandler (data){
     setFormData ({...formData, name: data.name, description: data.description})
     setEditData (data)
     console.log("test", data)
     setEditFlag(true)
-
-    // fetchNotes();
+    //   setNotes([]);
+    //  fetchNotes();
   }
   async function fetchNotes() {
     const apiData = await API.graphql({ query: listNotes });
@@ -63,8 +67,9 @@ function App() {
     // setNotes(newNotesArray);
     let x = await API.graphql({ query: updateNoteMutation, variables: { input: tempData  }});
     console.log("resr", x)
+    setEditFlag(false)
    
-    this.forceUpdate();
+    
   }
   async function onChange(e) {
     if (!e.target.files[0]) return
@@ -121,9 +126,9 @@ function App() {
    
 
       </div>
-      <AmplifySignOut />
+      
     </div>
   );
 }
 
-export default withAuthenticator(App);
+export default App;
