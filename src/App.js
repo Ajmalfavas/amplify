@@ -1,20 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import { API, Storage } from 'aws-amplify';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { listNotes } from './graphql/queries';
-import { createNote as createNoteMutation, deleteNote as deleteNoteMutation } from './graphql/mutations';
+import { createNote as createNoteMutation, deleteNote as deleteNoteMutation, updateNote as updateNoteMutation } from './graphql/mutations';
 
 const initialFormState = { name: '', description: '' }
 
 function App() {
   const [notes, setNotes] = useState([]);
   const [formData, setFormData] = useState(initialFormState);
+  const [editFlag, setEditFlag] = useState(false);
+  const [editData, setEditData] = useState(0);
+
+  const [, updateState] = useState();
+  const forceUpdate = useCallback(() => updateState({}), []);
+
 
   useEffect(() => {
     fetchNotes();
   }, []);
+  function updateHandler (data){
+    setFormData ({...formData, name: data.name, description: data.description})
+    setEditData (data)
+    console.log("test", data)
+    setEditFlag(true)
 
+    // fetchNotes();
+  }
   async function fetchNotes() {
     const apiData = await API.graphql({ query: listNotes });
     const notesFromAPI = apiData.data.listNotes.items;
@@ -27,8 +40,6 @@ function App() {
     }))
     setNotes(apiData.data.listNotes.items);
   }
-  
-
   async function createNote() {
     if (!formData.name || !formData.description) return;
     await API.graphql({ query: createNoteMutation, variables: { input: formData } });
@@ -44,6 +55,17 @@ function App() {
     setNotes(newNotesArray);
     await API.graphql({ query: deleteNoteMutation, variables: { input: { id } }});
   }
+  async function updateNote() {
+    const tempData = formData;
+    tempData.id = editData.id;
+    console.log("temp data", tempData)
+    // const newNotesArray = notes.filter(note => note.id !== id);
+    // setNotes(newNotesArray);
+    let x = await API.graphql({ query: updateNoteMutation, variables: { input: tempData  }});
+    console.log("resr", x)
+   
+    this.forceUpdate();
+  }
   async function onChange(e) {
     if (!e.target.files[0]) return
     const file = e.target.files[0];
@@ -51,14 +73,11 @@ function App() {
     await Storage.put(file.name, file);
     fetchNotes();
   }
-
+    
   return (
     <div className="App">
       <h1>My Notes App</h1>
-      <input
-        type="file"
-        onChange={onChange}
-      />
+      
       <input
         onChange={e => setFormData({ ...formData, 'name': e.target.value})}
         placeholder="Note name"
@@ -69,20 +88,38 @@ function App() {
         placeholder="Note description"
         value={formData.description}
       />
-      <button onClick={createNote}>Create Note</button>
+      {editFlag?
+      
+      <>
+      <button onClick={updateNote}>Edit Note</button><button onClick={()=>{
+        setEditFlag(false)
+      }}>Cancel</button></>:
+      <button onClick={createNote}>Create Note</button>}
+      
+
       <div style={{marginBottom: 30}}>
-      {
-        notes.map(note => (
-        <div key={note.id || note.name}>
-        <h2>{note.name}</h2>
-        <p>{note.description}</p>
-        <button onClick={() => deleteNote(note)}>Delete note</button>
+       <table width = '50%' align ="center" 
+       border = "1" 
+       style={{marginTop: "50px" }}>        
+        <tr>
+          <th>Name</th>
+           <th>Description</th>
+          <th>Edit</th>
+          <th>Delete</th>
+         </tr>
+       
         {
-        note.image && <img src={note.image} style={{width: 400}} />
-        }
-        </div>
-        ))
-      }
+          notes.map(note => (
+           <tr>
+          <td>{note.name}</td>
+          <td>{note.description}</td>
+          <td><button onClick={() => updateHandler(note)}>Edit</button></td>
+           <td><button onClick={() => deleteNote(note)}>Delete</button></td>
+        </tr>
+          ))}
+        </table>
+   
+
       </div>
       <AmplifySignOut />
     </div>
