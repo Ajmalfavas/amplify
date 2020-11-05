@@ -96,7 +96,7 @@ function App() {
       {editFlag?
       
       <>
-      <button onClick={updateNote}>Edit Note</button><button onClick={()=>{
+      <button onClick={updateNote}>Edit Note.</button><button onClick={()=>{
         setEditFlag(false)
       }}>Cancel</button></>:
       <button onClick={createNote}>Create Note</button>}
