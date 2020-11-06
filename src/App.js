@@ -5,7 +5,7 @@ import { API, Storage } from 'aws-amplify';
 import { listNotes } from './graphql/queries';
 import { createNote as createNoteMutation, deleteNote as deleteNoteMutation, updateNote as updateNoteMutation } from './graphql/mutations';
 
-const initialFormState = { name: '', description: '' }
+const initialFormState = { dep: '', name: '', description: '' }
 
 function App() {
   const [notes, setNotes] = useState([]);
@@ -25,7 +25,7 @@ function App() {
 
 
   function updateHandler (data){
-    setFormData ({...formData, name: data.name, description: data.description})
+    setFormData ({...formData, dep: data.dep, name: data.name, description: data.description})
     setEditData (data)
     console.log("test", data)
     setEditFlag(true)
@@ -45,7 +45,7 @@ function App() {
     setNotes(apiData.data.listNotes.items);
   }
   async function createNote() {
-    if (!formData.name || !formData.description) return;
+    if (!formData.name || !formData.name || !formData.description) return;
     await API.graphql({ query: createNoteMutation, variables: { input: formData } });
     // if (formData.image) {
     //   const image = await Storage.get(formData.image);
@@ -83,6 +83,13 @@ function App() {
     <div className="App">
       <h1>My Notes App</h1>
       
+       
+      <input
+        onChange={e => setFormData({ ...formData, 'dep': e.target.value})}
+        placeholder="Note name"
+        value={formData.dep}
+      />
+
       <input
         onChange={e => setFormData({ ...formData, 'name': e.target.value})}
         placeholder="Note name"
@@ -107,6 +114,7 @@ function App() {
        border = "1" 
        style={{marginTop: "50px" }}>        
         <tr>
+        <th>Dep</th>
           <th>Name</th>
            <th>Description</th>
           <th>Edit</th>
@@ -116,6 +124,7 @@ function App() {
         {
           notes.map(note => (
            <tr>
+             <td>{note.dep}</td>
           <td>{note.name}</td>
           <td>{note.description}</td>
           <td><button onClick={() => updateHandler(note)}>Edit</button></td>
