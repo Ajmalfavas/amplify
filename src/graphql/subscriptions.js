@@ -5,7 +5,6 @@ export const onCreateNote = /* GraphQL */ `
   subscription OnCreateNote {
     onCreateNote {
       id
-      dep
       name
       description
       createdAt
@@ -17,7 +16,6 @@ export const onUpdateNote = /* GraphQL */ `
   subscription OnUpdateNote {
     onUpdateNote {
       id
-      dep
       name
       description
       createdAt
@@ -29,7 +27,6 @@ export const onDeleteNote = /* GraphQL */ `
   subscription OnDeleteNote {
     onDeleteNote {
       id
-      dep
       name
       description
       createdAt
