@@ -36,3 +36,35 @@
     transform: rotate(360deg);
   }
 }
+body{
+  background-color: #9266ff;
+}
+.App{
+  background-color: #3f3160;
+  min-height:500px;
+  width: 700px;
+  margin: 40px auto;
+}
+#notes-app input{
+  background-color: rgba(27, 112, 137, 1);
+  border: 0; 
+  color: #fff;
+  width: 150px;
+  height: 40px;
+  margin: 20px;
+  padding: 0 5px;
+  font-size: 18px;
+  
+  border-radius: 10px;
+}
+#notes-app button{
+  height: 40px;
+  width: 100px;
+  border-radius: 5px;
+  border: 0;
+  background-color:rgba(202, 156, 24, 1); 
+  cursor: pointer;
+}
+#notes-app button:focus{
+  outline: none;
+}

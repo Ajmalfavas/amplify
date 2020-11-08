@@ -80,37 +80,42 @@ function App() {
   // }
     
   return (
-    <div className="App">
-      <h1>My Notes App</h1>
+    <div id="notes-app" className="App">
+      <h1 style={{ color: 'red' }}>PluginHive</h1>
       
     
       <input
         onChange={e => setFormData({ ...formData, 'name': e.target.value})}
-        placeholder="Note name"
+        placeholder="Enter Name"
         value={formData.name}
       />
       <input
         onChange={e => setFormData({ ...formData, 'description': e.target.value})}
-        placeholder="Note description"
+        placeholder="Enter Place"
         value={formData.description}
       />
       {editFlag?
       
       <>
-      <button onClick={updateNote}>Edit Note</button><button onClick={()=>{
+      <button style={{ color: "white", background: "green" }}
+       onClick={updateNote}>Edit</button>
+       <button style={{ color: "white", background: "red" }} onClick={()=>{
         setEditFlag(false)
       }}>Cancel</button></>:
-      <button onClick={createNote}>Create Note</button>}
+      <button style={{ color: "white", background: "green" }}
+      onClick={createNote}>Create</button>}
       
 
-      <div style={{marginBottom: 30}}>
-       <table width = '50%' align ="center" 
-       border = "1" background = "Violet"
-       style={{marginTop: "50px" }}>        
+      <div  style={{marginBottom: 30 }}>
+       <table
+       width = '80%' align ="center" 
+       border = "1" bgcolor ="AE9792" textcolor="white"
+       style={{marginTop: "50px"} }  >    
+     
         <tr>
         
           <th>Name</th>
-           <th>Description</th>
+           <th>Place</th>
           <th>Edit</th>
           <th>Delete</th>
          </tr>
@@ -121,8 +126,8 @@ function App() {
           
           <td>{note.name}</td>
           <td>{note.description}</td>
-          <td><button onClick={() => updateHandler(note)}>Edit</button></td>
-           <td><button onClick={() => deleteNote(note)}>Delete</button></td>
+          <td><button style={{ color: "white", background: "green" }}  onClick={() => updateHandler(note)}>Edit</button></td>
+           <td><button style={{ color: "white", background: "red" }} onClick={() => deleteNote(note)}>Delete</button></td>
         </tr>
           ))}
         </table>
