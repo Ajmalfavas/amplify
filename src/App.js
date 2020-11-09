@@ -5,7 +5,8 @@ import { API } from 'aws-amplify';
 import { listNotes } from './graphql/queries';
 import { createNote as createNoteMutation, deleteNote as deleteNoteMutation, updateNote as updateNoteMutation } from './graphql/mutations';
 
-const initialFormState = {  name: '', description: '' }
+
+const initialFormState = { name: '', description: '' }
 
 function App() {
   const [notes, setNotes] = useState([]);
@@ -17,6 +18,7 @@ function App() {
 
 
   useEffect(() => {
+    
     fetchNotes();
   }, []);
   useEffect(() => {
@@ -66,7 +68,7 @@ function App() {
     // const newNotesArray = notes.filter(note => note.id !== id);
     // setNotes(newNotesArray);
     let x = await API.graphql({ query: updateNoteMutation, variables: { input: tempData  }});
-    console.log("resr", x)
+    console.log("result", x)
     setEditFlag(false)
    
     
@@ -113,9 +115,8 @@ function App() {
        style={{marginTop: "50px"} }  >    
      
         <tr>
-        
           <th>Name</th>
-           <th>Place</th>
+          <th>Place</th>
           <th>Edit</th>
           <th>Delete</th>
          </tr>
@@ -123,11 +124,13 @@ function App() {
         {
           notes.map(note => (
            <tr>
-          
+          <td>{note.dep}</td>
           <td>{note.name}</td>
           <td>{note.description}</td>
-          <td><button style={{ color: "white", background: "green" }}  onClick={() => updateHandler(note)}>Edit</button></td>
-           <td><button style={{ color: "white", background: "red" }} onClick={() => deleteNote(note)}>Delete</button></td>
+          <td><button style={{ color: "white", background: "green" }} 
+           onClick={() => updateHandler(note)}>Edit</button></td>
+          <td><button style={{ color: "white", background: "red" }} 
+           onClick={() => deleteNote(note)}>Delete</button></td>
         </tr>
           ))}
         </table>
@@ -140,3 +143,4 @@ function App() {
 }
 
 export default App;
+
