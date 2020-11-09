@@ -1,5 +1,12 @@
 {
-  "auth": {},
+  "auth": {
+    "amplifyapp3d8f6b37": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  },
   "api": {
     "notesapp": {
       "service": "AppSync",

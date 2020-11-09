@@ -5,6 +5,7 @@ export const getNote = /* GraphQL */ `
   query GetNote($id: ID!) {
     getNote(id: $id) {
       id
+      email
       name
       description
       createdAt
@@ -21,6 +22,7 @@ export const listNotes = /* GraphQL */ `
     listNotes(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        email
         name
         description
         createdAt

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { API } from 'aws-amplify';
-
+import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
 import { listNotes } from './graphql/queries';
 import { createNote as createNoteMutation, deleteNote as deleteNoteMutation, updateNote as updateNoteMutation } from './graphql/mutations';
 
 
-const initialFormState = { name: '', description: '' }
+const initialFormState = { email: '',name: '', description: '' }
 
 function App() {
   const [notes, setNotes] = useState([]);
@@ -26,7 +26,7 @@ function App() {
 
 
   function updateHandler (data){
-    setFormData ({...formData, name: data.name, description: data.description})
+    setFormData ({...formData, email: data.email, name: data.name, description: data.description})
     setEditData (data)
     console.log("test", data)
     setEditFlag(true)
@@ -68,6 +68,7 @@ function App() {
     // setNotes(newNotesArray);
     let x = await API.graphql({ query: updateNoteMutation, variables: { input: tempData  }});
     console.log("result", x)
+   
     setEditFlag(false)
    
     
@@ -84,6 +85,12 @@ function App() {
     <div id="notes-app" className="App">
       <h1 style={{ color: 'red' }}>PluginHive</h1>
       
+      
+      <input
+        onChange={e => setFormData({ ...formData, 'email': e.target.value})}
+        placeholder="Enter Email"
+        value={formData.email}
+      />
     
       <input
         onChange={e => setFormData({ ...formData, 'name': e.target.value})}
@@ -114,6 +121,7 @@ function App() {
        style={{marginTop: "50px"} }  >    
      
         <tr>
+        <th>email</th>
           <th>Name</th>
           <th>Place</th>
           <th>Edit</th>
@@ -123,7 +131,7 @@ function App() {
         {
           notes.map(note => (
            <tr>
-          <td>{note.dep}</td>
+           <td>{note.email}</td>
           <td>{note.name}</td>
           <td>{note.description}</td>
           <td><button style={{ color: "white", background: "green" }} 
@@ -136,10 +144,10 @@ function App() {
    
 
       </div>
-      
+      <AmplifySignOut />
     </div>
   );
 }
 
-export default App;
+export default withAuthenticator(App);
 
