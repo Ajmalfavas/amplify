@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { API } from 'aws-amplify';
-import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
+//import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
 import { listNotes } from './graphql/queries';
 import { createNote as createNoteMutation, deleteNote as deleteNoteMutation, updateNote as updateNoteMutation } from './graphql/mutations';
 
 
-const initialFormState = { email: '',name: '', description: '' }
+const initialFormState = { email: 'hai',name: '', description: '' }
 
 function App() {
   const [notes, setNotes] = useState([]);
@@ -144,10 +144,11 @@ function App() {
    
 
       </div>
-      <AmplifySignOut />
+      {/* <AmplifySignOut /> */}
     </div>
   );
 }
 
-export default withAuthenticator(App);
+// export default withAuthenticator(App);
+export default App;
 
