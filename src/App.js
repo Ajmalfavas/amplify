@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { API } from 'aws-amplify';
-//import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
+import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
 import { listNotes } from './graphql/queries';
 import { createNote as createNoteMutation, deleteNote as deleteNoteMutation, updateNote as updateNoteMutation } from './graphql/mutations';
 
 
-const initialFormState = { email: 'hai',name: '', description: '' }
+const initialFormState = { email: '',name: '', description: '' }
 
 function App() {
   const [notes, setNotes] = useState([]);
@@ -46,7 +46,7 @@ function App() {
     setNotes(apiData.data.listNotes.items);
   }
   async function createNote() {
-    if ( !formData.name || !formData.description) return;
+    if ( !formData.email || !formData.name || !formData.description) return;
     await API.graphql({ query: createNoteMutation, variables: { input: formData } });
     // if (formData.image) {
     //   const image = await Storage.get(formData.image);
@@ -61,6 +61,7 @@ function App() {
     await API.graphql({ query: deleteNoteMutation, variables: { input: { id } }});
   }
   async function updateNote() {
+    
     const tempData = formData;
     tempData.id = editData.id;
     console.log("temp data", tempData)
@@ -95,7 +96,7 @@ function App() {
       <input
         onChange={e => setFormData({ ...formData, 'name': e.target.value})}
         placeholder="Enter Name"
-        value={formData.name}
+        value={formData.name} defaultValue="Reset"
       />
       <input
         onChange={e => setFormData({ ...formData, 'description': e.target.value})}
@@ -121,7 +122,7 @@ function App() {
        style={{marginTop: "50px"} }  >    
      
         <tr>
-        <th>email</th>
+        <th>Email</th>
           <th>Name</th>
           <th>Place</th>
           <th>Edit</th>
@@ -144,11 +145,11 @@ function App() {
    
 
       </div>
-      {/* <AmplifySignOut /> */}
+      <AmplifySignOut />
     </div>
   );
 }
 
-// export default withAuthenticator(App);
-export default App;
+ export default withAuthenticator(App);
+// export default App;
 
