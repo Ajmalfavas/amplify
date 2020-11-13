@@ -71,7 +71,7 @@ function App() {
     console.log("result", x)
    
     setEditFlag(false)
-   
+    setFormData(initialFormState);
     
   }
   // async function onChange(e) {
