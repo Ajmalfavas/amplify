@@ -96,7 +96,7 @@ function App() {
       <input
         onChange={e => setFormData({ ...formData, 'name': e.target.value})}
         placeholder="Enter Name"
-        value={formData.name} defaultValue="Reset"
+        value={formData.name}
       />
       <input
         onChange={e => setFormData({ ...formData, 'description': e.target.value})}
@@ -151,5 +151,4 @@ function App() {
 }
 
  export default withAuthenticator(App);
-// export default App;
 
